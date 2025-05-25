@@ -60,7 +60,7 @@ void tick_brush(struct brush *b, image img, struct brush_command cmd) {
 		move_brush(b);
 		draw_line(img, px, py, b->x, b->y, b->value);
 	}
-	++b->value;
+	++(b->value);
 }
 
 void draw_image(image img, struct brush_command *cmds, unsigned int ct) {

@@ -12,6 +12,11 @@
 #define E_G 127
 #define E_B 0
 
+/* background color */
+#define D_R 0
+#define D_G 0
+#define D_B 0
+
 /* smoothing */
 #define SMOOTHING 2
 
