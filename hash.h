@@ -8,7 +8,7 @@
 
 union hash {
 	unsigned char bytes[64];
-	struct brush_command cmds[64 / sizeof(struct brush_command)];
+	brush_command cmds[64 / sizeof(brush_command)];
 };
 
 union hash make_hash(char *str);

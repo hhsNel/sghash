@@ -3,10 +3,9 @@
 
 #include "drawing.h"
 
-struct brush_command {
-	signed char ax : 4;
-	signed char ay : 4;
-};
+typedef unsigned char brush_command;
+#define GET_AX(bc) ((int)(bc >> 4) - 8) / 2
+#define GET_AY(bc) ((int)(bc & 0x7) - 8) / 2
 
 struct brush {
 	int ax;
@@ -20,8 +19,8 @@ struct brush {
 
 struct brush make_brush();
 void move_brush(struct brush *b);
-void tick_brush(struct brush *b, image img, struct brush_command cmd);
-void draw_image(image img, struct brush_command *cmds, unsigned int ct);
+void tick_brush(struct brush *b, image img, brush_command cmd);
+void draw_image(image img, brush_command *cmds, unsigned int ct);
 
 struct brush make_brush() {
 	struct brush b;
@@ -46,12 +45,12 @@ void move_brush(struct brush *b) {
 	b->y += b->vy;
 }
 
-void tick_brush(struct brush *b, image img, struct brush_command cmd) {
+void tick_brush(struct brush *b, image img, brush_command cmd) {
 	int px, py;
 	unsigned int i;
 
-	b->ax = cmd.ax;
-	b->ay = cmd.ay;
+	b->ax = GET_AX(cmd);
+	b->ay = GET_AY(cmd);
 
 	for(i = 0; i < SMOOTHING; ++i) {
 		px = b->x;
@@ -63,7 +62,7 @@ void tick_brush(struct brush *b, image img, struct brush_command cmd) {
 	++(b->value);
 }
 
-void draw_image(image img, struct brush_command *cmds, unsigned int ct) {
+void draw_image(image img, brush_command *cmds, unsigned int ct) {
 	unsigned int i;
 	struct brush b;
 

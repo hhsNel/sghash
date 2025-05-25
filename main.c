@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
 		printf("Hashed, preparing image...\n");
 		img = init_image();
 		printf("Drawing image...\n");
-		draw_image(img, h.cmds, 64 / sizeof(struct brush_command));
+		draw_image(img, h.cmds, 64 / sizeof(brush_command));
 		printf("Saving image...\n");
 		snprintf(buff, 7, "%u.ff", i);
 		save_farbfeld(img, buff);
