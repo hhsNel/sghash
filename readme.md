@@ -5,7 +5,7 @@ Utility to make pretty images out of strings
 *wow so pretty*
 
 REQUIRES:  
-	- libcrypto (on pretty much any system)  
-	- for `sgh` bash script, `farbfeg` (in perticular `ff2png`)  
-	- for `sgh` bash script, `feh`  
+ - libcrypto (on pretty much any system)  
+ - for `sgh` bash script, `farbfeld` (in perticular `ff2png`)  
+ - for `sgh` bash script, `feh`  
 
