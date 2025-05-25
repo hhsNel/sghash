@@ -18,7 +18,7 @@
 #define D_B 0
 
 /* smoothing */
-#define SMOOTHING 16
+#define SMOOTHING 8
 
 /* length of the output of the hashing function */
 #define HASH_LENGTH 64
