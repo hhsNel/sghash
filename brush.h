@@ -4,8 +4,10 @@
 #include "drawing.h"
 
 typedef unsigned char brush_command;
-#define GET_AX(bc) ((int)(bc >> 4) - 8) / 2
-#define GET_AY(bc) ((int)(bc & 0x7) - 8) / 2
+#define GET_AX_1(bc) ((int)(bc & 0x3) - 2)
+#define GET_AY_1(bc) ((int)(bc >> 2 & 0x3) - 2)
+#define GET_AX_2(bc) ((int)(bc >> 4 & 0x3) - 2)
+#define GET_AY_2(bc) ((int)(bc >> 6 & 0x3) - 2)
 
 struct brush {
 	int ax;
@@ -19,7 +21,7 @@ struct brush {
 
 struct brush make_brush();
 void move_brush(struct brush *b);
-void tick_brush(struct brush *b, image img, brush_command cmd);
+void tick_brush(struct brush *b, image img, brush_command cmd, int first);
 void draw_image(image img, brush_command *cmds, unsigned int ct);
 
 struct brush make_brush() {
@@ -45,12 +47,14 @@ void move_brush(struct brush *b) {
 	b->y += b->vy;
 }
 
-void tick_brush(struct brush *b, image img, brush_command cmd) {
+void tick_brush(struct brush *b, image img, brush_command cmd, int first) {
 	int px, py;
 	unsigned int i;
 
-	b->ax = GET_AX(cmd);
-	b->ay = GET_AY(cmd);
+	b->ax = first ? GET_AX_1(cmd) : GET_AX_2(cmd);
+	b->ay = first ? GET_AY_1(cmd) : GET_AY_2(cmd);
+	if(b->ax >= 0) ++b->ax;
+	if(b->ay >= 0) ++b->ay;
 
 	for(i = 0; i < SMOOTHING; ++i) {
 		px = b->x;
@@ -64,12 +68,14 @@ void tick_brush(struct brush *b, image img, brush_command cmd) {
 
 void draw_image(image img, brush_command *cmds, unsigned int ct) {
 	unsigned int i;
+	int first = 1;
 	struct brush b;
 
 	b = make_brush();
 
-	for(i = 0; i < ct; ++i) {
-		tick_brush(&b, img, cmds[i]);
+	for(i = 0; i < ct*2; ++i) {
+		tick_brush(&b, img, cmds[i/2], first);
+		first = !first;
 	}
 }
 
