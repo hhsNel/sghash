@@ -10,7 +10,7 @@ for arg in "$@"; do
 	((i++))
 done
 
-feh .
+feh *.png
 
 rm ./*.ff ./*.png
 
