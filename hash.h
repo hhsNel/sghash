@@ -2,6 +2,7 @@
 #define HASH_H
 
 #include <openssl/sha.h>
+#include <openssl/evp.h>
 #include <string.h>
 
 #include "brush.h"
@@ -22,18 +23,34 @@ union hash make_hash(char *str) {
 }
 
 union hash make_hash_stdin() {
-	SHA512_CTX ctx;
 	unsigned char buff[4096];
 	size_t bytes;
 	union hash hash;
+	EVP_MD_CTX *ctx = EVP_MD_CTX_new();
+	unsigned int hash_len;
 
-	SHA512_Init(&ctx);
-	
-	while((bytes = fread(buff, 1, sizeof(buff), stdin)) > 0) {
-		SHA512_Update(&ctx, buff, bytes);
+	if(!ctx) {
+		printf("EVP_MD_CTX_new() returned NULL, returning\n");
+		return (union hash){};
+	}
+	if(EVP_DigestInit_ex(ctx, EVP_sha512(), NULL) != 1) {
+		printf("EVP_DigestInit_ex failed, returning\n");
+		return (union hash){};
 	}
 
-	SHA512_Final(hash.bytes, &ctx);
+	while((bytes = fread(buff, 1, sizeof(buff), stdin)) > 0) {
+		if(EVP_DigestUpdate(ctx, buff, bytes) != 1) {
+			printf("EVP_DigestUpdate failed, returning\n");
+			return (union hash){};
+		}
+	}
+
+	if(EVP_DigestFinal_ex(ctx, hash.bytes, &hash_len) != 1) {
+		printf("EVP_DigestFinal_ex failed, returning\n");
+		return (union hash){};
+	}
+
+	EVP_MD_CTX_free(ctx);
 	return hash;
 }
 
