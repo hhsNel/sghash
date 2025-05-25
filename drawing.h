@@ -20,9 +20,9 @@ typedef unsigned char channel_t;
 typedef channel_t **image;
 
 image init_image();
-void set_pixel(image img, unsigned int x, unsigned int y, channel_t value);
-channel_t get_pixel(image img, unsigned int x, unsigned int y);
-void draw_line(image img, unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2, channel_t value);
+void set_pixel(image img, int x, int y, channel_t value);
+channel_t get_pixel(image img, int x, int y);
+void draw_line(image img, int x1, int y1, int x2, int y2, channel_t value);
 void save_farbfeld(image img, char *name);
 
 image init_image() {
@@ -39,15 +39,15 @@ image init_image() {
 	return img;
 }
 
-void set_pixel(image img, unsigned int x, unsigned int y, channel_t value) {
-	img[x % RES_X][y % RES_Y] = value;
+void set_pixel(image img, int x, int y, channel_t value) {
+	img[(x % RES_X + RES_X) % RES_X][(y % RES_Y + RES_Y) % RES_Y] = value;
 }
 
-channel_t get_pixel(image img, unsigned int x, unsigned int y) {
-	return img[x % RES_X][y % RES_Y];
+channel_t get_pixel(image img, int x, int y) {
+	return img[(x % RES_X + RES_X) % RES_X][(y % RES_Y + RES_Y) % RES_Y];
 }
 
-void draw_line(image img, unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2, channel_t value) {
+void draw_line(image img, int x1, int y1, int x2, int y2, channel_t value) {
 	int dx, dy, sx, sy, error, e2;
 
 	dx = abs(x2 - x1);
@@ -92,7 +92,7 @@ void save_farbfeld(image img, char *name) {
 
 	for(y = 0; y < RES_Y; ++y) {
 		for(x = 0; x < RES_X; ++x) {
-#define MAX (SMOOTHING * HASH_LENGTH)
+#define MAX (HASH_LENGTH)
 #define COLOR(S_VALUE, E_VALUE, DEFAULT) (get_pixel(img,x,y) == (channel_t)-1 ? DEFAULT : ((E_VALUE * get_pixel(img,x,y) + S_VALUE * (MAX - get_pixel(img,x,y)) + MAX/2) / MAX))
 			v = BIG_ENDIAN16(COLOR(S_R, E_R, D_R) * 257);
 			fwrite(&v, 2, 1, f);

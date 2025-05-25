@@ -1,9 +1,9 @@
 #include <stdio.h>
 
 #include "config.h"
+#include "brush.h"
 #include "drawing.h"
 #include "hash.h"
-#include "brush.h"
 
 int main(int argc, char **argv) {
 	unsigned int i;

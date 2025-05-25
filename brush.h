@@ -4,8 +4,8 @@
 #include "drawing.h"
 
 struct brush_command {
-	int ax : 4;
-	int ay : 4;
+	signed char ax : 4;
+	signed char ay : 4;
 };
 
 struct brush {
