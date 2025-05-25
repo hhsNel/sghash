@@ -2,13 +2,17 @@
 
 cd ~/temp
 
-sghash "$@"
-
-i=1
-for arg in "$@"; do
-	ff2png < "$i.ff" > "$i.png"
-	((i++))
-done
+if [ "$#" == 0 ]; then
+	sghash
+	ff2png < 0.ff > 0.png
+else
+	sghash "$@"
+	i=1
+	for arg in "$@"; do
+		ff2png < "$i.ff" > "$i.png"
+		((i++))
+	done
+fi
 
 feh *.png
 
