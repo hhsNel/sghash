@@ -92,7 +92,7 @@ void save_farbfeld(image img, char *name) {
 
 	for(y = 0; y < RES_Y; ++y) {
 		for(x = 0; x < RES_X; ++x) {
-#define MAX (HASH_LENGTH)
+#define MAX (HASH_LENGTH*2)
 #define COLOR(S_VALUE, E_VALUE, DEFAULT) (get_pixel(img,x,y) == (channel_t)-1 ? DEFAULT : ((E_VALUE * get_pixel(img,x,y) + S_VALUE * (MAX - get_pixel(img,x,y)) + MAX/2) / MAX))
 			v = BIG_ENDIAN16(COLOR(S_R, E_R, D_R) * 257);
 			fwrite(&v, 2, 1, f);
