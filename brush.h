@@ -68,14 +68,13 @@ void tick_brush(struct brush *b, image img, brush_command cmd, int first) {
 
 void draw_image(image img, brush_command *cmds, unsigned int ct) {
 	unsigned int i;
-	int first = 1;
 	struct brush b;
 
 	b = make_brush();
 
-	for(i = 0; i < ct*2; ++i) {
-		tick_brush(&b, img, cmds[i/2], first);
-		first = !first;
+	for(i = 0; i < ct; ++i) {
+		tick_brush(&b, img, cmds[i], 1);
+		tick_brush(&b, img, cmds[i], 0);
 	}
 }
 
