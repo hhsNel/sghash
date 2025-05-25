@@ -4,7 +4,7 @@ cd ~/temp
 
 sghash "$@"
 
-i = 1
+i=1
 for arg in "$@"; do
 	ff2png < "$i.ff" > "$i.png"
 	((i++))
